@@ -8,6 +8,7 @@ from Util.ColumnSelector.GUI_configWorker import OptionsTables as OptionsTable
 from Util.GUI_Viewer import Console as console
 from client.DB_Manage import DatabaseConnectionTool as dct
 import os
+import webbrowser
 
 dirCurrent = os.path.dirname(os.path.abspath(__file__))
 BaseCL = ""
@@ -38,13 +39,7 @@ def shorten_filename(file_path, max_length=7):
     return shortened_file_path
 
 def open_new_window():
-    # Function to open a new window
-    new_window = tk.Toplevel(window)
-    new_window.title("Reader | Info")
-    new_window.geometry("250x350")
-    # Add content to the new window
-    new_label = tk.Label(new_window, text="This is a new window!")
-    new_label.pack(pady=20)
+    webbrowser.open('https://docs.google.com/document/d/1yBFWoD6KxabCf88Y5pYM4HiXqIwRxTITo9BtdC0Rdxk/edit?usp=sharing')
 
 def open_file_PROD():
     file_path = filedialog.askopenfilename(

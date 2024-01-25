@@ -33,11 +33,11 @@ class OptionsTables:
 
     def configure_table(self):
         menu = tk.Toplevel(self.window)
-        menu.geometry("350x400")
+        menu.geometry("450x400")
 
         # PD Section
-        label_pm_sku = tk.Label(menu, text="(Todos los numros comienzan en zero*)", font=("Helvetica", 9))
-        label_pm_sku.grid(row=0, column=2, padx=0 , sticky='w')
+        label_pm_sku = tk.Label(menu, text="(Todos los numeros comienzan en zero*)")
+        label_pm_sku.grid(row=0, column=2)
         label_pd_sku = tk.Label(menu, text="Base Principal", font=("Helvetica", 12, "bold"))
         label_pd_sku.grid(row=1, column=2, pady=10, sticky='w')
 
