@@ -6,7 +6,7 @@ class GlobalNotificationHandler:
             notification.notify(
             title=title,
             message=content,
-            timeout=5  # Notification will be visible for 10 seconds
+            timeout=2  # Notification will be visible for 10 seconds
             )
             return True
         except Exception as e:

@@ -57,12 +57,17 @@ class MDOos:
             
             # Read and print only the lines with missing UPC
             with open(self.file2, 'r') as file2:
+                # ROW = PROD - LINES = CLIENT !!!
                 self.csv_reader_DB = csv.reader(file2)
                 for row in self.csv_reader:
                     self.total = self.total + 1
-                    if not row[1]:
+                    if not row[self.pd_SKU_Column]:
                         self.counter = self.counter + 1
                         """
+                        # ROWS
+                        -- ROW 0 NAME (CHECK_TARGET)
+                        -- ROW 1 UPC (FILL_OBJECTIVE)
+                        -- ROW >2 USELESS DATA
                         print("Nombre:", row[0])
                         print("UPC is missing!")
                         print("Artista:", row[2])
@@ -73,16 +78,16 @@ class MDOos:
                         for lines in self.csv_reader_DB:
                             #print("Searching now", lines[0])
                             try:
-                                if lines[0] == row[0]:
-                                    self.console_instance.consoleSend("green", f"UPC: {row[0]} | {lines[1]}")
-                                    print(f"Found UPC for UPC: {row[0]} | ({lines[1]})")
+                                if lines[self.cl_Name_Column] == row[self.pd_Name_Column]:
+                                    self.console_instance.consoleSend("green", f"UPC: {row[self.pd_Name_Column]} | {lines[self.cl_SKU_Column]}")
+                                    print(f"Found UPC for UPC: {row[self.pd_Name_Column]} | ({lines[self.cl_SKU_Column]})")
                                     self.counter = self.counter - 1
                                     self.found = self.found + 1
-                                    self.fixQueue.append([row[0], lines[1], self.total])
+                                    self.fixQueue.append([row[self.pd_Name_Column], lines[self.cl_SKU_Column], self.total])
                                     break
                             except:
                                 print(f"UPC not found for UPC: {row[0]}")
-                                self.console_instance.consoleSend("crimson", f"UPC not found for UPC: {row[0]}")
+                                self.console_instance.consoleSend("crimson", f"UPC not found for UPC: {row[self.pd_Name_Column]}")
         print("Total:", self.total, "Broken:", self.counter, "Fixed:", self.found)
         return self.fixQueue
 
@@ -94,12 +99,12 @@ class MDOos:
             csv_reader = csv.reader(file)
             
             # Read all rows into a list
-            dataF = list(csv_reader)
-        for item in fixList:
+            dataF = list(csv_reader) # DATAF = ROW
+        for item in fixList: # LINE = item
             # Check if the specified row_to_edit and column_to_edit are within the range of the data
             if True:
                 # Modify the specific element
-                dataF[item[2]][1] = str(int(item[1]))  # Replace with your desired value
+                dataF[item[2]][self.pd_SKU_Column] = str(int(item[1]))  # Replace with your desired value
                 print(f"Row {item[2] + 1} has been successfully edited.")
                 self.console_instance.consoleSend("green", f"Row: edited {item[1]}")
             else:
@@ -115,9 +120,9 @@ class MDOos:
                 for row in dataF:
                     if len(row) > 1:
                         # Check if the value in column 1 has at least 2 characters
-                        if len(row[1]) >= 5:
+                        if len(row[self.pd_SKU_Column]) >= 5:
                             # Remove the last two characters from the value in column 1
-                            row[1] = row[1][:-2]
+                            row[self.pd_SKU_Column] = row[self.pd_SKU_Column][:-2]
                             # Write the modified data to the CSV file
             csv_writer.writerows(dataF)
             return True
@@ -128,6 +133,10 @@ class MDOos:
         self.file2 = "cache/cacheCLIENT.csv"
         self.config = data
         self.outputName = str(self.config["OutputName"])
+        self.cl_SKU_Column = int(self.config["CL_SKU-Column"]) # LINE 1
+        self.pd_SKU_Column = int(self.config["PD_SKU-Column"]) # ROW 1
+        self.cl_Name_Column = int(self.config["CL_Name-Column"]) # LinE 0
+        self.pd_Name_Column = int(self.config["PD_Name-Column"]) # ROW 0
 
     def startWorker(self):
         Notifications.push('Estado', "Estamos procesando tu archivo")

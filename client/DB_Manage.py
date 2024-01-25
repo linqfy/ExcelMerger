@@ -12,7 +12,6 @@ class DatabaseConnectionTool():
     
     def __init__(self, window, console):
         self.window = window
-        self.fileOutName = config["OutputName"]
         self.notifications = config["Notifications"]
         self.console = console
         self.fileProd = False

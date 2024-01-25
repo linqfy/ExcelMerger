@@ -4,6 +4,7 @@ import os
 from PIL import Image, ImageTk
 from tkinter import filedialog
 from Util.GUI_options import Options
+from Util.ColumnSelector.GUI_configWorker import OptionsTables as OptionsTable
 from Util.GUI_Viewer import Console as console
 from client.DB_Manage import DatabaseConnectionTool as dct
 import os
@@ -47,13 +48,13 @@ def open_new_window():
 
 def open_file_PROD():
     file_path = filedialog.askopenfilename(
-        title="Seleccionar archivos Excel",
+        title="Seleccionar archivos Excel (Produccion)",
         filetypes=[("Archivos Excel", "*.xlsx")]
     )
     if file_path:
         # Check if the selected file has a valid extension
         if file_path.lower().endswith(('.xlsx')):
-            print("Selected file:", file_path)
+            print("Selected file: ", file_path)
             dct(window, console_instance).UpdateProd(file_path)
             incorrect_label_PROD.config(text=f"Seleccionado: {shorten_filename(os.path.basename(file_path))}", fg="green")
         else:
@@ -61,7 +62,7 @@ def open_file_PROD():
 
 def open_file_Cliente():
     file_path = filedialog.askopenfilename(
-        title="Seleccionar archivos Excel",
+        title="Seleccionar archivos Excel (Cliente)",
         filetypes=[("Archivos Excel", "*.xlsx")]
     )
     if file_path:
@@ -86,7 +87,7 @@ def deleteFiles():
     delete_file(os.path.join(dirCurrent, "cache", "cacheCLIENT.csv"))
 # Create the main window
 window = tk.Tk()
-window.title("Reader | Medalplay")
+window.title("Programa | Medalplay")
 window.geometry("400x400")
 
 # Load an image
@@ -132,7 +133,7 @@ console_instance.lowerConsole()
 
 buttonSTART = tk.Button(window, text="INICIAR\nPROCESO", command=dct(window, console_instance).test, height=8)
 buttonSTART.grid(row = 8, column = 2)
-buttonSTOP = tk.Button(window, text="TERMINAR", command=deleteFiles, height=8)
+buttonSTOP = tk.Button(window, text="CONFIGURAR", command=OptionsTable(window, console_instance).configure_table, height=8)
 buttonSTOP.grid(row = 8, column = 3, padx=15)
 buttonOPTIONS = tk.Button(window, text="OPCIONES", command=Options(window, console_instance).configure, height=8)
 buttonOPTIONS.grid(row = 8, column = 15)
