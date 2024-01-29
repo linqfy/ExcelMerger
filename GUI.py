@@ -50,7 +50,7 @@ def open_file_PROD():
         # Check if the selected file has a valid extension
         if file_path.lower().endswith(('.xlsx')):
             print("Selected file: ", file_path)
-            dct(window, console_instance).UpdateProd(file_path)
+            dct(window, console_instance, dirCurrent).UpdateProd(file_path)
             incorrect_label_PROD.config(text=f"Seleccionado: {shorten_filename(os.path.basename(file_path))}", fg="green")
         else:
             incorrect_label_PROD.config(text="Error! El archivo no es Excel")
@@ -64,7 +64,7 @@ def open_file_Cliente():
         # Check if the selected file has a valid extension
         if file_path.lower().endswith(('.xlsx')):
             print("Selected file:", file_path)
-            dct(window, console_instance).UpdateClient(file_path)
+            dct(window, console_instance, dirCurrent).UpdateClient(file_path)
             incorrect_label_CL.config(text=f"Seleccionado: {shorten_filename(os.path.basename(file_path))}", fg="green")
         else:
             incorrect_label_CL.config(text="Error! El archivo no es Excel")
@@ -126,7 +126,7 @@ console_instance = console(window)
 console_instance.consoleShow()
 console_instance.lowerConsole()
 
-buttonSTART = tk.Button(window, text="INICIAR\nPROCESO", command=dct(window, console_instance).test, height=8)
+buttonSTART = tk.Button(window, text="INICIAR\nPROCESO", command=dct(window, console_instance, dirCurrent).test, height=8)
 buttonSTART.grid(row = 8, column = 2)
 buttonSTOP = tk.Button(window, text="CONFIGURAR", command=OptionsTable(window, console_instance).configure_table, height=8)
 buttonSTOP.grid(row = 8, column = 3, padx=15)
