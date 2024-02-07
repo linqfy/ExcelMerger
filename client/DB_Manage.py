@@ -5,6 +5,8 @@ import pandas as pd
 import random
 from Util.NTF_Manage import GlobalNotificationHandler as Notifications
 import os
+import csv
+import tkinter as tk
 
 f = open('config.json')
 config = json.load(f)
@@ -22,13 +24,29 @@ class DatabaseConnectionTool():
             Notifications.push('Estado', "El archivo ha sido generado!")
     
     def UpdateProd(self, fileProd):
-        self.fileProd = rd(self.window, self.console).ReadStartProd(fileProd)
+        self.fileProd = rd(self.window, self.console).ReadStartProd(fileProd)[0]
         if self.fileProd is not None:
             # Write the DataFrame to a CSV file
             self.fileProd.to_csv(os.path.join(self.dirCurrent, "cache", "cachePROD.csv"), index=False)
 
     def UpdateClient(self, fileClient):
-        self.fileClient = rd(self.window, self.console).ReadStartClient(fileClient)
+        self.headerFix = bool(config["SkipRowLabel"]) # ROW 0
+        dataRAW = rd(self.window, self.console).ReadStartClient(fileClient)
+        self.fileClient = dataRAW[0] 
+        nameFILE = dataRAW[1]
         if self.fileClient is not None:
             # Write the DataFrame to a CSV file
+
+            statusLabel = tk.Label(self.window, text=f"La base cliente esta\nusando la tabla:\n{nameFILE}", fg="green")
+            statusLabel.grid(row=10, column=3)
+            
             self.fileClient.to_csv(os.path.join(self.dirCurrent, "cache", "cacheCLIENT.csv"), index=False)
+            if self.headerFix:
+                with open(os.path.join(self.dirCurrent, "cache", "cacheCLIENT.csv"), 'r', newline='') as infile:
+                    reader = csv.reader(infile)
+                    next(reader)  # Skip the first line
+                    data = list(reader)
+
+                with open(os.path.join(self.dirCurrent, "cache", "cacheCLIENT.csv"), 'w', newline='') as outfile:
+                    writer = csv.writer(outfile)
+                    writer.writerows(data)

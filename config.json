@@ -2,11 +2,12 @@
     "OutputName": "Output",
     "Notifications": true,
     "fixIssuesNumbers": true,
-    "CL_SKU-Column": 1,
-    "PD_SKU-Column": 1,
-    "CL_Name-Column": 0,
-    "PD_Name-Column": 0,
-    "CL_Num-Table": 0,
+    "CL_SKU-Column": 7,
+    "PD_SKU-Column": 3,
+    "CL_Name-Column": 4,
+    "PD_Name-Column": 1,
+    "CL_Num-Table": 2,
     "PD_Num-Table": 0,
+    "SkipRowLabel": true,
     "_DEFAULTS": "Defaults: ['Output'], true, true, 1, 1, 0, 0, 0, 0"
 }

@@ -18,6 +18,7 @@ class OptionsTables:
         self.pd_Name_Column = tk.IntVar(value=int(self.config["PD_Name-Column"]))
         self.cl_Num_Table = tk.IntVar(value=int(self.config["CL_Num-Table"]))
         self.pd_Num_Table = tk.IntVar(value=int(self.config["PD_Num-Table"]))
+        self.headerFix = tk.BooleanVar(value=bool(self.config["SkipRowLabel"]))
 
     def save_config(self):
         self.config["CL_SKU-Column"] = self.cl_SKU_Column.get()
@@ -26,10 +27,11 @@ class OptionsTables:
         self.config["PD_Name-Column"] = self.pd_Name_Column.get()
         self.config["CL_Num-Table"] = self.cl_Num_Table.get()
         self.config["PD_Num-Table"] = self.pd_Num_Table.get()
+        self.config["SkipRowLabel"] = self.headerFix.get()
 
         with open('config.json', 'w') as json_file:
             json.dump(self.config, json_file, indent=4)
-        self.console_instance.consoleSend("green", f"Configuration saved.")
+        self.console.consoleSend("green", f"Configuration saved.")
 
     def configure_table(self):
         menu = tk.Toplevel(self.window)
@@ -79,9 +81,12 @@ class OptionsTables:
         entry_cl_num = tk.Entry(menu, textvariable=self.cl_Num_Table)
         entry_cl_num.grid(row=9, column=2)
 
+        headerFix_Check = tk.Checkbutton(menu, text="Marcar solo si hay texto\nen la primera linea", variable=self.headerFix)
+        headerFix_Check.grid(row=10, column=1)
+        
         # Separator
         separator2 = tk.Label(menu, text="-------------------------------------")
-        separator2.grid(row=10, column=2, pady=10, sticky='w')
+        separator2.grid(row=11, column=2, pady=10, sticky='w')
 
         save_button = tk.Button(menu, text="Save", command=self.save_config)
-        save_button.grid(row=11, column=2, pady=10)
+        save_button.grid(row=12, column=2, pady=10)
