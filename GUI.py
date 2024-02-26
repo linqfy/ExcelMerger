@@ -12,7 +12,7 @@ import webbrowser
 
 dirCurrent = os.path.dirname(os.path.abspath(__file__))
 BaseCL = ""
-BasePROD= ""
+BasePROD = ""
 
 
 def delete_file(file_path):
@@ -21,6 +21,7 @@ def delete_file(file_path):
         print(f"The file '{file_path}' has been deleted.")
     except OSError as e:
         print(f"Error deleting the file '{file_path}': {e}")
+
 
 def shorten_filename(file_path, max_length=7):
     # Split the file path into the directory, base name, and extension
@@ -38,55 +39,81 @@ def shorten_filename(file_path, max_length=7):
 
     return shortened_file_path
 
+
 def open_new_window():
-    webbrowser.open('https://docs.google.com/document/d/1yBFWoD6KxabCf88Y5pYM4HiXqIwRxTITo9BtdC0Rdxk/edit?usp=sharing')
+    webbrowser.open(
+        "https://docs.google.com/document/d/1yBFWoD6KxabCf88Y5pYM4HiXqIwRxTITo9BtdC0Rdxk/edit?usp=sharing"
+    )
+
 
 def open_file_PROD():
     file_path = filedialog.askopenfilename(
         title="Seleccionar archivos Excel (Produccion)",
-        filetypes=[("Archivos Excel", "*.xlsx")]
+        filetypes=[("Archivos Excel", "*.xlsx")],
     )
     if file_path:
         # Check if the selected file has a valid extension
-        if file_path.lower().endswith(('.xlsx')):
+        if file_path.lower().endswith((".xlsx")):
             print("Selected file: ", file_path)
             dct(window, console_instance, dirCurrent).UpdateProd(file_path)
-            incorrect_label_PROD.config(text=f"Seleccionado: {shorten_filename(os.path.basename(file_path))}", fg="green")
+            incorrect_label_PROD.config(
+                text=f"Seleccionado: {shorten_filename(os.path.basename(file_path))}",
+                fg="green",
+            )
         else:
             incorrect_label_PROD.config(text="Error! El archivo no es Excel")
+
 
 def open_file_Cliente():
     file_path = filedialog.askopenfilename(
         title="Seleccionar archivos Excel (Cliente)",
-        filetypes=[("Archivos Excel", "*.xlsx")]
+        filetypes=[("Archivos Excel", "*.xlsx")],
     )
     if file_path:
         # Check if the selected file has a valid extension
-        if file_path.lower().endswith(('.xlsx')):
+        if file_path.lower().endswith((".xlsx")):
             print("Selected file:", file_path)
             dct(window, console_instance, dirCurrent).UpdateClient(file_path)
-            incorrect_label_CL.config(text=f"Seleccionado: {shorten_filename(os.path.basename(file_path))}", fg="green")
+            incorrect_label_CL.config(
+                text=f"Seleccionado: {shorten_filename(os.path.basename(file_path))}",
+                fg="green",
+            )
         else:
             incorrect_label_CL.config(text="Error! El archivo no es Excel")
 
+
 def create_separator_top():
-    separator_top = tk.Label(window, text="------------- IMPORTAR BASES -------------", font=("Helvetica", 12, "bold"))
+    separator_top = tk.Label(
+        window,
+        text="------------- IMPORTAR BASES -------------",
+        font=("Helvetica", 12, "bold"),
+    )
     separator_top.grid(row=1, column=1, columnspan=15, pady=10, sticky="nsew")
 
+
 def create_separator_bottom():
-    separator_bottom = tk.Label(window, text="------------------- ACCIONES -------------------", font=("Helvetica", 12, "bold"))
+    separator_bottom = tk.Label(
+        window,
+        text="------------------- ACCIONES -------------------",
+        font=("Helvetica", 12, "bold"),
+    )
     separator_bottom.grid(row=7, column=2, columnspan=15, pady=10, sticky="nsew")
+
 
 def deleteFiles():
     delete_file(os.path.join(dirCurrent, "cache", "cachePROD.csv"))
     delete_file(os.path.join(dirCurrent, "cache", "cacheCLIENT.csv"))
+
+
 # Create the main window
 window = tk.Tk()
 window.title("Programa | Medalplay")
 window.geometry("400x400")
 
 # Load an image
-image_path = os.path.join(dirCurrent, "cdn", "info.png")# Replace with the actual path to your image
+image_path = os.path.join(
+    dirCurrent, "cdn", "info.png"
+)  # Replace with the actual path to your image
 
 # Read the Image
 opened = Image.open(image_path)
@@ -96,26 +123,26 @@ img = ImageTk.PhotoImage(resized)
 
 # Create a button with an image
 button = tk.Button(window, image=img, command=open_new_window, width=20, height=20)
-button.grid(row = 0, column = 0)
+button.grid(row=0, column=0)
 
 
 # FILE SECTION
 buttonPROD = tk.Button(window, text="Abrir base PROD", command=open_file_PROD)
-buttonPROD.grid(row = 2, column = 2)
+buttonPROD.grid(row=2, column=2)
 
 # FILE INCORRECT SECTION
 
 incorrect_label_PROD = tk.Label(window, text="", fg="red")
-incorrect_label_PROD.grid(row = 2, column = 3)
+incorrect_label_PROD.grid(row=2, column=3)
 
 # FILE SECTION
 buttonCLIENT = tk.Button(window, text="Abrir base CLIENTE", command=open_file_Cliente)
-buttonCLIENT.grid(row = 3, column = 2)
+buttonCLIENT.grid(row=3, column=2)
 
 # FILE INCORRECT SECTION
 
 incorrect_label_CL = tk.Label(window, text="", fg="red")
-incorrect_label_CL.grid(row = 3, column = 3)
+incorrect_label_CL.grid(row=3, column=3)
 
 # SEPARATORS
 # Create separators at the top and bottom
@@ -126,18 +153,33 @@ console_instance = console(window)
 console_instance.consoleShow()
 console_instance.lowerConsole()
 
-buttonSTART = tk.Button(window, text="INICIAR\nPROCESO", command=dct(window, console_instance, dirCurrent).test, height=8)
-buttonSTART.grid(row = 8, column = 2)
-buttonSTOP = tk.Button(window, text="CONFIGURAR", command=OptionsTable(window, console_instance).configure_table, height=8)
-buttonSTOP.grid(row = 8, column = 3, padx=15)
-buttonOPTIONS = tk.Button(window, text="OPCIONES", command=Options(window, console_instance).configure, height=8)
-buttonOPTIONS.grid(row = 8, column = 15)
+buttonSTART = tk.Button(
+    window,
+    text="INICIAR\nPROCESO",
+    command=dct(window, console_instance, dirCurrent).test,
+    height=8,
+)
+buttonSTART.grid(row=8, column=2)
+buttonSTOP = tk.Button(
+    window,
+    text="CONFIGURAR",
+    command=OptionsTable(window, console_instance).configure_table,
+    height=8,
+)
+buttonSTOP.grid(row=8, column=3, padx=15)
+buttonOPTIONS = tk.Button(
+    window,
+    text="OPCIONES",
+    command=Options(window, console_instance).configure,
+    height=8,
+)
+buttonOPTIONS.grid(row=8, column=15)
 
 image_path = os.path.join(dirCurrent, "cdn", "logo.png")
 lgo = Image.open(image_path)
 lgo = ImageTk.PhotoImage(lgo)
 window.iconphoto(False, lgo)
-window.configure(background='#dcdedc')
+window.configure(background="#dcdedc")
 
 
 deleteFiles()
